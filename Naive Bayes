@@ -1,0 +1,38 @@
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+# Sample 
+emails = ['Hello this is a legitimate email',
+          'Congratulations you have won a lottery',
+          'Meet me at the secret location',
+          'important information about your account',]
+
+labels = [0, 1, 1, 0]
+
+# Convert text data to feature 
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(emails)
+
+# Split data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, labels, test_size=0.25, random_state=42)
+
+# Create a Naive Bayes classifier
+nb_classifier = MultinomialNB()
+nb_classifier.fit(X_train, y_train)
+
+# Predict the labels
+new_email = ['Get your free gift now']
+new_email_features = vectorizer.transform(new_email)
+
+# Make prediction
+prediction = nb_classifier.predict(new_email_features)
+
+# Interpret the result
+if prediction[0] == 1:
+    result = 'Spam'
+else:
+    result = 'Not Spam'
+    
+print('The email is:', result)
